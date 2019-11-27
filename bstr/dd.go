@@ -55,13 +55,13 @@ func dump(name interface{}, value reflect.Value, deepin int) {
 			deepin--
 			printOrigin("}", deepin)
 		case reflect.Interface:
-			printType(value.Interface(), deepin, "=>{")
-		default:
 			printValue(name, value.Interface(), deepin)
 			deepin++
 			dump(name, reflect.ValueOf(value.Interface()), deepin)
 			deepin--
 			printOrigin("}", deepin)
+		default:
+			printValue(name, value.Interface(), deepin)
 		}
 	} else {
 		printValue(name, "", deepin)
