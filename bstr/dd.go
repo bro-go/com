@@ -46,18 +46,20 @@ func dump(name interface{}, value reflect.Value, deepin int) {
 			deepin--
 			printOrigin(")", deepin)
 		case reflect.Struct:
-			printType(value.Interface(), deepin, "=>{")
-			deepin++
 			if value.Type().Name() == "Time" {
-				printOrigin(value.Interface(), deepin)
+				printDeepin(deepin)
+				fmt.Printf("(%T)%[1]v: ", name)
+				fmt.Printf("(%T)%v\n", value.Interface(), value.Interface())
 			} else {
+				printType(value.Interface(), deepin, "=>{")
+				deepin++
 				for i := 0; i < t.NumField(); i++ {
 					field := t.Field(i)
 					dump(field.Name, value.FieldByIndex([]int{i}), deepin)
 				}
+				deepin--
+				printOrigin("}", deepin)
 			}
-			deepin--
-			printOrigin("}", deepin)
 		case reflect.Interface:
 			printValue(name, value.Interface(), deepin)
 			deepin++
